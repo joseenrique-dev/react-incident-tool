@@ -1,5 +1,5 @@
 import { React } from "react";
-import { useTable, useFilters, useGlobalFilter } from "react-table";
+import { useTable, useFilters, useGlobalFilter, useSortBy } from "react-table";
 import { GlobalFilter, DefaultFilterForColumn } from "./Filter";
 
 export default function Table({ columns, data }) {
@@ -20,37 +20,57 @@ export default function Table({ columns, data }) {
       defaultColumn: { Filter: DefaultFilterForColumn },
     },
     useFilters,
-    useGlobalFilter
+    useGlobalFilter,
+    useSortBy
   );
 
   return (
     <table {...getTableProps()}>
       <thead>
-        <tr>
-          <th
-            colSpan={visibleColumns.length}
-            style={{
-              textAlign: "center",
-            }}
-          >
-            {/* rendering global filter */}
-            <GlobalFilter
-              preGlobalFilteredRows={preGlobalFilteredRows}
-              globalFilter={state.globalFilter}
-              setGlobalFilter={setGlobalFilter}
-            />
-          </th>
-        </tr>
-        {headerGroups.map((headerGroup) => (
-          <tr {...headerGroup.getHeaderGroupProps()}>
-            {headerGroup.headers.map((column) => (
-              <th {...column.getHeaderProps()}>
-                {column.render("Header")}
-                {/* rendering column filter */}
-                <div>{column.canFilter ? column.render("Filter") : null}</div>
-              </th>
-            ))}
-          </tr>
+        {/*<tr>*/}
+        {/*  <th*/}
+        {/*    colSpan={visibleColumns.length}*/}
+        {/*    style={{*/}
+        {/*      textAlign: "center",*/}
+        {/*    }}*/}
+        {/*  >*/}
+        {/*    /!* rendering global filter *!/*/}
+        {/*    <GlobalFilter*/}
+        {/*      preGlobalFilteredRows={preGlobalFilteredRows}*/}
+        {/*      globalFilter={state.globalFilter}*/}
+        {/*      setGlobalFilter={setGlobalFilter}*/}
+        {/*    />*/}
+        {/*  </th>*/}
+        {/*</tr>*/}
+        {/*{headerGroups.map((headerGroup) => (*/}
+        {/*  <tr {...headerGroup.getHeaderGroupProps()}>*/}
+        {/*    {headerGroup.headers.map((column) => (*/}
+        {/*      <th {...column.getHeaderProps()}>*/}
+        {/*        {column.render("Header")}*/}
+        {/*        /!* rendering column filter *!/*/}
+        {/*        <div>{column.canFilter ? column.render("Filter") : null}</div>*/}
+        {/*      </th>*/}
+        {/*    ))}*/}
+        {/*  </tr>*/}
+        {/*))}*/}
+        {headerGroups.map(headerGroup => (
+            <tr {...headerGroup.getHeaderGroupProps()}>
+                {headerGroup.headers.map(column => (
+                    // Add the sorting props to control sorting. For this example
+                    // we can add them into the header props
+                    <th {...column.getHeaderProps(column.getSortByToggleProps())}>
+                        {column.render('Header')}
+                        {/* Add a sort direction indicator */}
+                        <span>
+                    {column.isSorted
+                        ? column.isSortedDesc
+                            ? ' 🔽'
+                            : ' 🔼'
+                        : ''}
+                  </span>
+                    </th>
+                ))}
+            </tr>
         ))}
       </thead>
       <tbody {...getTableBodyProps()}>
