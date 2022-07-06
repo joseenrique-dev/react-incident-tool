@@ -1,6 +1,6 @@
 import { React } from "react";
 import { useTable, useFilters, useGlobalFilter, useSortBy } from "react-table";
-import { GlobalFilter, DefaultFilterForColumn } from "./Filter";
+import { GlobalFilter, DefaultFilterForColumn } from "../Filter";
 
 export default function Table({ columns, data }) {
   const {
@@ -27,32 +27,21 @@ export default function Table({ columns, data }) {
   return (
     <table {...getTableProps()}>
       <thead>
-        {/*<tr>*/}
-        {/*  <th*/}
-        {/*    colSpan={visibleColumns.length}*/}
-        {/*    style={{*/}
-        {/*      textAlign: "center",*/}
-        {/*    }}*/}
-        {/*  >*/}
-        {/*    /!* rendering global filter *!/*/}
-        {/*    <GlobalFilter*/}
-        {/*      preGlobalFilteredRows={preGlobalFilteredRows}*/}
-        {/*      globalFilter={state.globalFilter}*/}
-        {/*      setGlobalFilter={setGlobalFilter}*/}
-        {/*    />*/}
-        {/*  </th>*/}
-        {/*</tr>*/}
-        {/*{headerGroups.map((headerGroup) => (*/}
-        {/*  <tr {...headerGroup.getHeaderGroupProps()}>*/}
-        {/*    {headerGroup.headers.map((column) => (*/}
-        {/*      <th {...column.getHeaderProps()}>*/}
-        {/*        {column.render("Header")}*/}
-        {/*        /!* rendering column filter *!/*/}
-        {/*        <div>{column.canFilter ? column.render("Filter") : null}</div>*/}
-        {/*      </th>*/}
-        {/*    ))}*/}
-        {/*  </tr>*/}
-        {/*))}*/}
+      <tr>
+          <th
+            colSpan={visibleColumns.length}
+            style={{
+              textAlign: "center",
+            }}
+          >
+            {/* rendering global filter */}
+            <GlobalFilter
+              preGlobalFilteredRows={preGlobalFilteredRows}
+              globalFilter={state.globalFilter}
+              setGlobalFilter={setGlobalFilter}
+            />
+          </th>
+        </tr>
         {headerGroups.map(headerGroup => (
             <tr {...headerGroup.getHeaderGroupProps()}>
                 {headerGroup.headers.map(column => (

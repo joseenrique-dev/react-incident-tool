@@ -35,3 +35,8 @@ table th::before {
   padding: 20px;
   color: #00000094
 }
+
+.data-user-item{
+  font-size: 15px;
+  font-weight: bold;
+}

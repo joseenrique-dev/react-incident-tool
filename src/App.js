@@ -1,11 +1,9 @@
 import React, { useState, useEffect } from "react";
-// import axios from "axios";
-import Table from "./TableContainer";
-// import { SelectColumnFilter } from "./Filter";
+import Table from "./components/TableContainer";
+import UserGeneralData from './components/UserGeneralData';
 import {userData} from "./db/output";
-
-import "./App.css";
 import { countProjectByUser } from './helpers/entities-analizer';
+import "./App.css";
 
 function App() {
   const [data, setData] = useState([]);
@@ -18,12 +16,10 @@ function App() {
     {
       Header: "User Id",
       accessor: (originalRow, rowIndex)=>Object.keys(originalRow)[0],
-      // disableFilters: true,
     },
     {
       Header: "Entities count",
       accessor: (originalRow, rowIndex)=>Object.values(originalRow)[0].entities.length,
-      // disable the filter for particular column
       disableFilters: true,
       Cell: ({ cell: { value } }) => {
         return value || "-"
@@ -58,6 +54,7 @@ function App() {
       <h1>
         <center>React Incident Tool</center>
       </h1>
+      <UserGeneralData data={data} />
       <Table columns={columns} data={data} />
     </div>
   );
