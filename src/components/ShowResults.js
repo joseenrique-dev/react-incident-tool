@@ -1,14 +1,16 @@
-import React, { useEffect, useState } from 'react'
-import Table from './TableContainer'
-import UserGeneralData from './UserGeneralData'
-import {userData} from "../db/output";
+import React, { useEffect, useState } from 'react';
+import { useLocation } from "react-router-dom";
+import Table from './TableContainer';
+import UserGeneralData from './UserGeneralData';
 import { countProjectByUser } from '../helpers/entities-analizer';
 const ShowResults = () => {
+    const location = useLocation();
     const [data, setData] = useState([]);
 
   useEffect(() => {
-    setData(userData)
-  }, []);
+    console.log('Location', location.state.data);
+    setData(location.state.data)
+  }, [location]);
 
   const columns = [
     {
@@ -52,7 +54,10 @@ const ShowResults = () => {
         <center>React Incident Tool</center>
       </h1>
       <UserGeneralData data={data} />
-      <Table columns={columns} data={data} />
+      {
+        data.length > 0 &&
+        <Table columns={columns} data={data} />
+      }
     </div>
   )
 }
