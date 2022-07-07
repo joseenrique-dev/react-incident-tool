@@ -12,7 +12,7 @@ export function GlobalFilter({ globalFilter, setGlobalFilter }) {
 
   return (
     <div>
-      <Label>Search Table: </Label>
+      <Label>General search: </Label>
       <Input
         value={value || ""}
         onChange={(e) => {
