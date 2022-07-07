@@ -85,7 +85,7 @@ const ShowResults = () => {
         <center>React Incident Tool</center>
       </h1>
       <div className='mb-2'>
-        <button className="btn btn-primary" onClick={()=>navigate('/')}>Load another Json file</button>
+        <button className="btn btn-secondary" onClick={()=>navigate('/')}>Load another Json file</button>
       </div>
       <UserGeneralData data={data} />
       {
