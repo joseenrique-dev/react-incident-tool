@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
+
 import Table from './TableContainer';
 import UserGeneralData from './UserGeneralData';
 import { countProjectByUser } from '../helpers/entities-analizer';
 
 const ShowResults = () => {
+  const navigate = useNavigate();
     const location = useLocation();
     const [data, setData] = useState([]);
 
@@ -82,6 +84,9 @@ const ShowResults = () => {
       <h1>
         <center>React Incident Tool</center>
       </h1>
+      <div className='mb-2'>
+        <button className="btn btn-primary" onClick={()=>navigate('/')}>Load another Json file</button>
+      </div>
       <UserGeneralData data={data} />
       {
         data.length > 0 &&
