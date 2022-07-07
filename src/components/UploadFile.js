@@ -8,7 +8,6 @@ const UploadFile = () => {
 
   const handleChange = (e) => {
     setLoading(true);
-    console.log('Loading 1', loading);
     const file = e.target.files[0];
     const reader = new FileReader();
     reader.onload = (e) => {
@@ -16,7 +15,6 @@ const UploadFile = () => {
       console.log(data);
       setTimeout(() => {
         setLoading(false);
-        console.log('Loading 2', loading);
         navigate('/results', { state: { data } });
       }, 3000);
     }

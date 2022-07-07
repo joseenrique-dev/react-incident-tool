@@ -3,51 +3,80 @@ import { useLocation } from "react-router-dom";
 import Table from './TableContainer';
 import UserGeneralData from './UserGeneralData';
 import { countProjectByUser } from '../helpers/entities-analizer';
+
 const ShowResults = () => {
     const location = useLocation();
     const [data, setData] = useState([]);
 
   useEffect(() => {
-    console.log('Location', location.state.data);
     setData(location.state.data)
   }, [location]);
 
-  const columns = [
-    {
-      Header: "User Id",
-      accessor: (originalRow, rowIndex)=>Object.keys(originalRow)[0],
-    },
-    {
-      Header: "Entities count",
-      accessor: (originalRow, rowIndex)=>Object.values(originalRow)[0].entities.length,
-      disableFilters: true,
-      Cell: ({ cell: { value } }) => {
-        return value || "-"
+  const columns = React.useMemo(
+    () =>[
+      {
+        // Build our expander column
+        id: 'expander', // Make sure it has an ID
+        Header: ({ getToggleAllRowsExpandedProps, isAllRowsExpanded }) => (
+          <span {...getToggleAllRowsExpandedProps()}>
+            {/* {isAllRowsExpanded ? '↧' : '↦'} */}
+          </span>
+        ),
+        accessor: (originalRow, rowIndex)=>Object.values(originalRow)[0].entities,
+        Cell: ({ row }) =>
+          // Use the row.canExpand and row.getToggleRowExpandedProps prop getter
+          // to build the toggle for expanding a row
+          row.values.expander.length > 0 ? (
+            <span
+              {...row.getToggleRowExpandedProps({
+                style: {
+                  // We can even use the row.depth property
+                  // and paddingLeft to indicate the depth
+                  // of the row
+                  paddingLeft: `${row.depth * 2}rem`,
+                },
+              })}
+            >
+              {row.isExpanded ? '↧' : '↦'}
+            </span>
+          ) : null,
       },
-    },
-    {
-      Header: "Asociated projects",
-      accessor: (originalRow, rowIndex)=>countProjectByUser(Object.values(originalRow)[0].entities),
-      disableFilters: true,
-    },
-    {
-      Header: "Entities type",
-      accessor: (originalRow, rowIndex)=>{
-        const entities = Object.values(originalRow)[0].entities;
-        return  entities.map(data => data.type).join(",");
+      {
+        Header: "User Id",
+        accessor: (originalRow, rowIndex)=>Object.keys(originalRow)[0],
       },
-      disableFilters: true,
-    },
-    {
-      Header: "Updated",
-      accessor: (originalRow, rowIndex)=>{
-        const entityKey = Object.values(originalRow)[0].entities;
-        return `Updated: ${entityKey[0]?.updated}`
+      {
+        Header: "Entities count",
+        accessor: (originalRow, rowIndex)=>Object.values(originalRow)[0].entities.length,
+        disableFilters: true,
+        Cell: ({ cell: { value } }) => {
+          return value || "-"
+        },
       },
-      disableFilters: true,
-      Cell: ({ cell: { value } }) => value || "-",
-    }
-  ];
+      {
+        Header: "Asociated projects",
+        accessor: (originalRow, rowIndex)=>countProjectByUser(Object.values(originalRow)[0].entities),
+        disableFilters: true,
+      },
+      {
+        Header: "Entities type",
+        accessor: (originalRow, rowIndex)=>{
+          const entities = Object.values(originalRow)[0].entities;
+          return  entities.map(data => data.type).join(",");
+        },
+        disableFilters: true,
+      },
+      {
+        Header: "Updated",
+        accessor: (originalRow, rowIndex)=>{
+          const entityKey = Object.values(originalRow)[0].entities;
+          return `Updated: ${entityKey[0]?.updated}`
+        },
+        disableFilters: true,
+        Cell: ({ cell: { value } }) => value || "-",
+      }
+  ],[]);
+  
   return (
     <div>
       <h1>
@@ -56,7 +85,7 @@ const ShowResults = () => {
       <UserGeneralData data={data} />
       {
         data.length > 0 &&
-        <Table columns={columns} data={data} />
+        <Table columns={columns} data={data}/>
       }
     </div>
   )

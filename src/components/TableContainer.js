@@ -1,8 +1,9 @@
 import { React } from "react";
-import { useTable, useFilters, useGlobalFilter, useSortBy } from "react-table";
+import { useTable, useFilters, useGlobalFilter, useSortBy, useExpanded } from "react-table";
 import { GlobalFilter, DefaultFilterForColumn } from "../Filter";
+import ShowEntity from './ShowEntity';
 
-export default function Table({ columns, data }) {
+export default function Table({ columns, data, renderRowSubComponent }) {
   const {
     getTableProps,
     getTableBodyProps,
@@ -21,7 +22,8 @@ export default function Table({ columns, data }) {
     },
     useFilters,
     useGlobalFilter,
-    useSortBy
+    useSortBy,
+    useExpanded
   );
 
   return (
@@ -66,11 +68,37 @@ export default function Table({ columns, data }) {
         {rows.map((row, i) => {
           prepareRow(row);
           return (
-            <tr {...row.getRowProps()}>
-              {row.cells.map((cell) => {
-                return <td {...cell.getCellProps()}>{cell.render("Cell")}</td>;
-              })}
-            </tr>
+            <>
+              <tr {...row.getRowProps()}>
+                {row.cells.map((cell) => {
+                  return <td {...cell.getCellProps()}>{cell.render("Cell")}</td>;
+                })}
+              </tr>
+              {
+                row.isExpanded &&
+                <tr>
+                  <td colSpan={visibleColumns.length}>
+                  <h4>
+                    <center>Entities</center>
+                  </h4>
+                  <hr />
+                  <div class="container">
+                    <div class="row">
+                      {
+                        row.values.expander.map(val => {
+                          return (
+                            <>
+                              <ShowEntity {...val}/>
+                            </>
+                          )
+                        })
+                      }
+                    </div>
+                  </div>
+                  </td>
+              </tr>
+              }
+            </>
           );
         })}
       </tbody>
