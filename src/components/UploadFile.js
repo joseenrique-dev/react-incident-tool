@@ -25,9 +25,8 @@ const UploadFile = () => {
 
   return (
           <div className="container">
-            <div className="page-header">
-              <h1>Upload file</h1>
-              <h6>Load user pool data in json format</h6>
+            <div className="page-header d-flex justify-content-center">
+              <h1>Load Entities User Pool User</h1>
             </div>
             <div className="alert alert-info">
               This "app" is only with the propose of analyze the data from the json file.
